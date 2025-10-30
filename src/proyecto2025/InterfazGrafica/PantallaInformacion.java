@@ -5,39 +5,85 @@
  */
 package proyecto2025.InterfazGrafica;
 
+import Proyecto2025.CapaPersistencia.PersistenciaApp;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+
 import javax.swing.table.DefaultTableModel;
+import proyecto2025.CapaLogica.FachadaLogica;
 
 /**
  *
  * @author USUARIO
  */
 public class PantallaInformacion extends javax.swing.JFrame {
+    // Clase que representa la ventana de información de profesores y licencias.
+    // Extiende JFrame, por lo que es una ventana gráfica de Swing.
 
-    /**
-     * Creates new form PantallaInformacion
-     */
+    private int controlError;
+    // Variable usada para controlar estados o errores internos de la ventana.
+
+    private void cargarDatosDesdeBD() {
+        controlError = -1;
+        try {
+            ResultSet rs = FachadaLogica.obtenerDatosInformacion();
+            // Llama a la fachada lógica para obtener los datos desde la base de datos.
+
+            DefaultTableModel modelo = (DefaultTableModel) tablainfo.getModel();
+            modelo.setRowCount(0); // Limpia filas previas de la tabla.
+
+            while (rs.next()) {
+                Object[] fila = {
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("materias"),
+                    rs.getString("nombre_grupo"),
+                    rs.getInt("id_grupo"),
+                    rs.getString("fecha_inicio"),
+                    rs.getString("fecha_cierre")
+                };
+                modelo.addRow(fila);
+                // Añade cada fila del ResultSet a la tabla.
+            }
+
+            rs.close(); // Cierra el ResultSet.
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar datos: " + e.getMessage());
+            // Muestra un mensaje de error si ocurre algún problema al cargar datos.
+        }
+    }
+
     public PantallaInformacion() {
-        initComponents();
-        
-                     setDefaultCloseOperation(0);
-           setLocationRelativeTo(null);
-           
-                            
+        controlError = 1;
 
-    
-}public void agregarFilaATabla(String nombre, String apellido, String materia, String curso, String desde, String hasta) {
-    
-    DefaultTableModel modelo = (DefaultTableModel) tablainfo.getModel();
-    
-    modelo.addRow(new Object[] {
-        nombre,
-        apellido,
-        materia,
-        curso,
-        desde,
-        hasta
-    });
-}
+        initComponents(); // Inicializa los componentes generados por NetBeans.
+        cargarDatosDesdeBD(); // Carga datos desde la base de datos al abrir la ventana.
+
+        setDefaultCloseOperation(0); // Evita que cerrar la ventana termine la aplicación.
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla.
+        setResizable(false); // Bloquea cambios de tamaño.
+
+        tablainfo.setDefaultEditor(Object.class, null); 
+        // Deshabilita la edición de celdas de la tabla.
+
+        // Ajusta el alto de la tabla según la cantidad de filas.
+        int rowCount = tablainfo.getRowCount();
+        int rowHeight = tablainfo.getRowHeight();
+        int tableHeight = rowCount * rowHeight;
+        tablainfo.setPreferredScrollableViewportSize(new java.awt.Dimension(
+            tablainfo.getPreferredSize().width,
+            tableHeight
+        ));
+        tablainfo.revalidate(); // Redibuja la tabla.
+        tablainfo.repaint();
+    }
+
+    public void agregarFilaATabla(String nombre, String apellido, String materias, String nombre_grupo, int id_grupo,
+                                  String fecha_inicio, String fecha_fin) {
+        DefaultTableModel modelo = (DefaultTableModel) tablainfo.getModel();
+        modelo.addRow(new Object[]{nombre, apellido, materias, nombre_grupo, id_grupo, fecha_inicio, fecha_fin});
+        // Permite agregar una fila manualmente a la tabla.
+    }
 
 
     /**
@@ -51,29 +97,25 @@ public class PantallaInformacion extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tablainfo = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tablainfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Apellido", "Materia", "Grupo", "Desde", "Hasta"
+                "Nombre", "Apellido", "Materias", "Grupo", "id_grupo", "Desde", "Hasta"
             }
         ));
         jScrollPane1.setViewportView(tablainfo);
-
-        jLabel1.setText("Bienvenid@");
+        if (tablainfo.getColumnModel().getColumnCount() > 0) {
+            tablainfo.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         volver.setText("Volver");
         volver.addActionListener(new java.awt.event.ActionListener() {
@@ -87,33 +129,33 @@ public class PantallaInformacion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(132, 132, 132)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                .addComponent(volver)
-                .addContainerGap())
+                .addContainerGap(66, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(volver)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(volver))
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addGap(60, 60, 60)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(volver)
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
-setVisible(false); // Oculta esta ventana
-    PantallaPrincipal principal = new PantallaPrincipal();
-    principal.setVisible(true); // Muestra el menú principal      
+ 
+        controlError = 2;
+        setVisible(false); // Oculta esta ventana.
+        PantallaPrincipal principal = new PantallaPrincipal();
+        principal.setVisible(true); // Muestra el menú principal.
+    
+
         
 // TODO add your handling code here:
     }//GEN-LAST:event_volverActionPerformed
@@ -121,42 +163,12 @@ setVisible(false); // Oculta esta ventana
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaInformacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaInformacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaInformacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaInformacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PantallaInformacion().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablainfo;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -12,9 +12,11 @@ import java.util.Date;
  * @author USUARIO
  */
 public class licencia {
+
+    
     
  
-    
+    private int id_Licencia;
  private String fecha_inicio;
     private String fecha_fin;
     private String justificacion;
@@ -44,5 +46,11 @@ public class licencia {
     }
 
     
-    
+    public int getId_Licencia() {
+        return id_Licencia;
+    }
+
+    public void setId_licencia(int id_Licencia) {
+        this.id_Licencia = id_Licencia;
+    }
 }

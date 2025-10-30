@@ -68,7 +68,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="infoadm">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Informacio administracion"/>
+                <Property name="text" type="java.lang.String" value="Informacion administracion"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoadmActionPerformed"/>

@@ -14,7 +14,15 @@ package proyecto2025.CapaLogica;
 public class curso {
 
     private String nombre_grupo;
+private int id_grupo;
 
+    public int getId_grupo() {
+        return id_grupo;
+    }
+
+    public void setId_grupo(int id_grupo) {
+        this.id_grupo = id_grupo;
+    }
 
    
     public String getNombre_grupo() {
@@ -25,8 +33,5 @@ public class curso {
         this.nombre_grupo = nombre_grupo;
     }
 
-    
-    
-    
 }
 

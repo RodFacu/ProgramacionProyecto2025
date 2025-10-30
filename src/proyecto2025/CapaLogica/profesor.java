@@ -50,12 +50,12 @@ public class profesor {
         this.turno = turno;
     }
 
-    public String getMaterias() {
+    public String getMateria() {
         return materias;
     }
 
-    public void setMaterias(String materias) {
-        this.materias = materias;
+    public void setMaterias(String materia) {
+        this.materias = materia;
     }
 
     public int getTelefono() {
@@ -66,12 +66,5 @@ public class profesor {
         this.telefono = telefono;
     }
 
-    public void setTelefono(String telefono) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-  
     
-    
-
 }
