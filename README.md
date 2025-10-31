@@ -44,3 +44,60 @@ Integrante	Rol
 Facundo Rodríguez	Programador Backend
 Julián Rodríguez	Diseñador de Interfaz Gráfica
 Joaquín Schol	Líder y Gestor de Base de Datos
+
+BASE DE DATOS_____
+CREATE TABLE ADMINISTRADOR (
+    usuario VARCHAR(50) PRIMARY KEY,
+    contrasena VARCHAR(50) NOT NULL
+);
+
+-- Tabla GRUPO (sin clave primaria)
+CREATE TABLE GRUPO (
+    id_grupo INT,
+    nombre_grupo VARCHAR(50) NOT NULL
+);
+
+-- Tabla PROFESOR (sin foreign key hacia GRUPO)
+CREATE TABLE PROFESOR (
+    cedula INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    telefono INT,
+    turno VARCHAR(20),
+    id_grupo INT,
+    materias VARCHAR(100)
+);
+
+-- Tabla LICENCIA
+CREATE TABLE LICENCIA (
+    id_licencia INT PRIMARY KEY AUTO_INCREMENT,
+    fecha_inicio VARCHAR(20),
+    fecha_cierre VARCHAR(20),
+    justificacion VARCHAR(100),
+    cedula INT,
+    FOREIGN KEY (cedula) REFERENCES PROFESOR(cedula)
+);
+
+-- Tabla REGISTRA
+CREATE TABLE REGISTRA (
+    id_admin VARCHAR(50),
+    cedula INT,
+    id_licencia INT,
+    fecha_registro VARCHAR(20),
+    PRIMARY KEY (id_admin, cedula, id_licencia),
+    FOREIGN KEY (id_admin) REFERENCES ADMINISTRADOR(usuario),
+    FOREIGN KEY (cedula) REFERENCES PROFESOR(cedula),
+    FOREIGN KEY (id_licencia) REFERENCES LICENCIA(id_licencia)
+);
+
+-- Tabla INASISTENCIA
+CREATE TABLE INASISTENCIA (
+    cedula INT,
+    id_licencia INT,
+    fecha_inicio VARCHAR(20),
+    fecha_cierre VARCHAR(20),
+    justificacion VARCHAR(100),
+    PRIMARY KEY (cedula, id_licencia),
+    FOREIGN KEY (cedula) REFERENCES PROFESOR(cedula),
+    FOREIGN KEY (id_licencia) REFERENCES LICENCIA(id_licencia)
+);
