@@ -1,12 +1,17 @@
 package proyecto2025.InterfazGrafica;
 
 
+import CapaException.BDException;
 import Proyecto2025.CapaPersistencia.PersistenciaApp;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import proyecto2025.CapaLogica.FachadaLogica;
 import proyecto2025.CapaLogica.Login;
 import proyecto2025.CapaLogica.curso;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingUtilities;
 
 
 
@@ -20,7 +25,7 @@ public class PantallaRegistro extends javax.swing.JFrame {
 
     private String usuario;
     // Almacena el nombre del usuario que está realizando el registro.
-    // Puede ser usado para auditoría o para mostrar en la interfaz.
+    // Puede ser usado para auditoría o para mostrar e n la interfaz.
 
     private int controlError;
     // Variable interna para controlar errores o estados durante la interacción con la ventana.
@@ -30,6 +35,36 @@ public class PantallaRegistro extends javax.swing.JFrame {
         this.usuario = usuario;
 
         initComponents();
+        // Validaciones de entrada
+permitirSoloLetras(txtnombre);
+permitirSoloLetras(txtapellido);
+permitirSoloLetras(txtmaterias);
+permitirSoloLetras(txtNombre_grupo);
+permitirSoloLetras(txtjustificacion);
+permitirSoloLetras(txtturno);
+
+permitirSoloNumeros(txtcedula);
+permitirSoloNumeros(txttelefono);
+permitirSoloNumeros(txtId_grupo);
+
+//
+// validacion de maxios caracteres
+permitirSoloLetras(txtnombre);
+permitirSoloLetras(txtapellido);
+permitirSoloLetras(txtmaterias);
+permitirSoloLetras(txtNombre_grupo);
+permitirSoloLetras(txtjustificacion);
+permitirSoloLetras(txtturno);
+
+// Números
+permitirSoloNumeros(txtId_grupo);
+
+// Validaciones con reglas específicas
+validarCedula(txtcedula);
+validarTelefono(txttelefono);
+validarFecha(txtfechainicio);
+validarFecha(txtfechafin);
+
         // Inicializa todos los componentes gráficos generados por NetBeans.
 
         setDefaultCloseOperation(0);
@@ -55,9 +90,53 @@ public class PantallaRegistro extends javax.swing.JFrame {
         txtfechafin.addActionListener(e -> txttelefono.requestFocus());
         // Esto mejora la experiencia del usuario, permitiendo moverse rápidamente entre los campos.
     }
+    private boolean mostrandoMensajeLetras = false;
+
+   private void permitirSoloLetras(javax.swing.JTextField campo) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyTyped(java.awt.event.KeyEvent e) {
+            char c = e.getKeyChar();
+
+            // Ignorar Enter y Tab
+            if (c == KeyEvent.VK_ENTER || c == KeyEvent.VK_TAB) return;
+
+            // Permitir solo letras, espacio y retroceso
+            if (!Character.isLetter(c) && c != ' ' && c != '\b') {
+                e.consume();
+
+                 if (!mostrandoMensajeLetras) {
+                    mostrandoMensajeLetras = true;
+                    JOptionPane.showMessageDialog(null, "Solo se permiten letras.");
+                 }
+            }
+        }
+    });
+}
 
 
+private void permitirSoloNumeros(javax.swing.JTextField campo) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyTyped(java.awt.event.KeyEvent e) {
+            char c = e.getKeyChar();
 
+            // Ignorar Enter y Tab
+            if (c == KeyEvent.VK_ENTER || c == KeyEvent.VK_TAB) return;
+
+            // Permitir solo dígitos y retroceso
+            if (!Character.isDigit(c) && c != '\b') {
+                e.consume();
+
+                    if (!mostrandoMensajeLetras) {
+                    mostrandoMensajeLetras = true;
+                    JOptionPane.showMessageDialog(null, "Solo se permiten números.");
+                  }
+            }
+        }
+    });
+}   
+            
    
       
     public  void  limpiar (){
@@ -191,7 +270,7 @@ public class PantallaRegistro extends javax.swing.JFrame {
 
         jLabel13.setText("Ej: 12345678");
 
-        jLabel14.setText("Ej: Matematica, etc, etc");
+        jLabel14.setText("Ej: Matematica");
 
         jLabel16.setText("Ej: Matutino");
 
@@ -211,7 +290,7 @@ public class PantallaRegistro extends javax.swing.JFrame {
             }
         });
 
-        jLabel22.setText("ej: 091 824 782");
+        jLabel22.setText("ej: 091824782");
 
         jLabel23.setText("Id de su grupo");
 
@@ -382,6 +461,7 @@ public class PantallaRegistro extends javax.swing.JFrame {
  controlError = -1;
 // Inicializa el control de errores con un valor de estado inicial.
 
+
 try { 
     controlError = 1;
     // 1. Tomar los datos ingresados en el formulario
@@ -398,6 +478,11 @@ try {
     int telefono = Integer.parseInt(txttelefono.getText());
     // Se capturan todos los datos ingresados por el usuario en los distintos campos.
     // Se hace parseInt para los campos numéricos (cedula, id_grupo, telefono).
+
+    if(FachadaLogica.existeCedula(cedula)) {
+    JOptionPane.showMessageDialog(this, "La cédula " + cedula + " ya existe.");
+    return; // Sale del método y no intenta guardar
+}
 
     controlError = 2;
     FachadaLogica.guardarGrupo(id_grupo, nombre_grupo);
@@ -423,6 +508,7 @@ try {
     } catch (Exception e) {
         usuarioAdmin = "Sistema";
     }
+    
     // Obtiene el usuario actual de la sesión (quien está haciendo el registro)
     // y asigna un valor por defecto si no se encuentra un usuario activo.
 
@@ -478,24 +564,90 @@ JOptionPane.showMessageDialog(this, "Datos guardados correctamente en todas las 
 this.dispose();
 // Limpia el formulario y cierra la ventana de registro.
 
-} catch (SQLException sqlEx) {
-    // Manejo de errores específicos de la base de datos
-    String mensaje;
-    if (sqlEx.getErrorCode() == 1062) { // Error MySQL: Duplicate entry
-        mensaje = "Error: Ya existe un registro con ese valor (PK duplicada).";
-    } else if (sqlEx.getErrorCode() == 1452) { // Error MySQL: FK violation
-        mensaje = "Error: No se puede guardar el registro debido a una restricción de clave foránea.";
+ } catch (SQLException e) {
+    if (e.getMessage().contains("Duplicate entry")) {
+        JOptionPane.showMessageDialog(this, "Ya existe un profesor con esa cédula.", "Error", JOptionPane.ERROR_MESSAGE);
     } else {
-        mensaje = "Error en la base de datos: " + sqlEx.getMessage();
+        JOptionPane.showMessageDialog(this, "Error al registrar el profesor: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-    JOptionPane.showMessageDialog(this, mensaje);
-} catch (NumberFormatException nfEx) {
-    // Captura errores al convertir cadenas a números
-    JOptionPane.showMessageDialog(this, "Error: uno de los campos numéricos no es válido.");
-} catch (Exception e) {
-    // Captura cualquier otro error inesperado
-    JOptionPane.showMessageDialog(this, "Error inesperado en controlError " + controlError + ": " + e.getMessage());
+}       catch (Proyecto2025.CapaExcepcion.BDException ex) {
+            System.getLogger(PantallaRegistro.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (BDException ex) {
+            System.getLogger(PantallaRegistro.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+// Método genérico para limitar cantidad de caracteres
+private void limitarLongitud(javax.swing.JTextField campo, int max, String mensajeError) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyTyped(java.awt.event.KeyEvent e) {
+            if (campo.getText().length() >= max) {
+                e.consume();
+                JOptionPane.showMessageDialog(null, mensajeError);
+            }
+        }
+    });
 }
+
+//  Método para validar fechas (formato dd.mm.aaaa)
+private void validarFecha(javax.swing.JTextField campo) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyReleased(java.awt.event.KeyEvent e) {
+            String texto = campo.getText();
+            // Permitir solo números y puntos
+            if (!texto.matches("[0-9.]*")) {
+                campo.setText(texto.replaceAll("[^0-9.]", "")); // elimina caracteres no válidos
+                JOptionPane.showMessageDialog(null, "Formato incorrecto. Use solo números y puntos. Ejemplo: 04.05.2025");
+            }
+            // Verificar longitud máxima
+            if (texto.length() > 10) {
+                campo.setText(texto.substring(0, 10));
+                JOptionPane.showMessageDialog(null, "La fecha debe tener como máximo 10 caracteres. Ejemplo: 04.05.2025");
+            }
+        }
+    });
+}
+
+//  Método para validar cédula
+private void validarCedula(javax.swing.JTextField campo) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyReleased(java.awt.event.KeyEvent e) {
+            String texto = campo.getText();
+            // Solo dígitos
+            if (!texto.matches("[0-9]*")) {
+                campo.setText(texto.replaceAll("[^0-9]", ""));
+                JOptionPane.showMessageDialog(null, "La cédula debe contener solo números (8 dígitos). Ejemplo: 12345678");
+            }
+            if (texto.length() > 8) {
+                campo.setText(texto.substring(0, 8));
+                JOptionPane.showMessageDialog(null, "La cédula debe tener exactamente 8 dígitos. Ejemplo: 12345678");
+            }
+        }
+    });
+}
+
+// Método para validar teléfono
+private void validarTelefono(javax.swing.JTextField campo) {
+    campo.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyReleased(java.awt.event.KeyEvent e) {
+            String texto = campo.getText();
+            // Solo dígitos
+            if (!texto.matches("[0-9]*")) {
+                campo.setText(texto.replaceAll("[^0-9]", ""));
+                JOptionPane.showMessageDialog(null, "El teléfono debe contener solo números (9 dígitos). Ejemplo: 091824782");
+            }
+            if (texto.length() > 9) {
+                campo.setText(texto.substring(0, 9));
+                JOptionPane.showMessageDialog(null, "El teléfono debe tener exactamente 9 dígitos. Ejemplo: 091824782");
+            }
+        }
+    });
+
+
 
     
 

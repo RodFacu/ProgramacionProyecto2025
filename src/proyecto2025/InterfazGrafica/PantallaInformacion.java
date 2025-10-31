@@ -65,6 +65,7 @@ public class PantallaInformacion extends javax.swing.JFrame {
 
         tablainfo.setDefaultEditor(Object.class, null); 
         // Deshabilita la edición de celdas de la tabla.
+        tablainfo.getTableHeader().setReorderingAllowed(false);
 
         // Ajusta el alto de la tabla según la cantidad de filas.
         int rowCount = tablainfo.getRowCount();
@@ -76,6 +77,9 @@ public class PantallaInformacion extends javax.swing.JFrame {
         ));
         tablainfo.revalidate(); // Redibuja la tabla.
         tablainfo.repaint();
+        tablainfo.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tablainfo.getTableHeader().setResizingAllowed(false);
+
     }
 
     public void agregarFilaATabla(String nombre, String apellido, String materias, String nombre_grupo, int id_grupo,
@@ -156,7 +160,7 @@ public class PantallaInformacion extends javax.swing.JFrame {
         principal.setVisible(true); // Muestra el menú principal.
     
 
-        
+      
 // TODO add your handling code here:
     }//GEN-LAST:event_volverActionPerformed
 

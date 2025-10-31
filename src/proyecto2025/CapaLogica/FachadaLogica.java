@@ -129,19 +129,43 @@ public class FachadaLogica {
 
     // Guardar profesor
     public static void guardarProfesor(int cedula, String nombre, String apellido, int telefono, String turno, int id_grupo, String materias) throws SQLException, BDException, CapaException.BDException {
-        Connection con = Conexion.getConnection();
-        PreparedStatement ps = con.prepareStatement(SQL_PROFESOR);
-        ps.setInt(1, cedula);
-        ps.setString(2, nombre);
-        ps.setString(3, apellido);
-        ps.setInt(4, telefono);
-        ps.setString(5, turno);
-        ps.setInt(6, id_grupo);
-        ps.setString(7, materias);
-        ps.executeUpdate();
-        ps.close();
-        con.close();
+      
+    Connection con = null;
+    PreparedStatement psVerificar = null;
+    PreparedStatement psInsertar = null;
+    ResultSet rs = null;
+
+    try {
+        con = Conexion.getConnection();
+
+        String sqlVerificar = "SELECT COUNT(*) FROM profesor WHERE cedula = ?";
+        psVerificar = con.prepareStatement(sqlVerificar);
+        psVerificar.setInt(1, cedula);
+        rs = psVerificar.executeQuery();
+        rs.next();
+        int existe = rs.getInt(1);
+
+        if (existe > 0) {
+            throw new SQLException("Ya existe un profesor con esa cédula.");
+        }
+
+        psInsertar = con.prepareStatement(SQL_PROFESOR);
+        psInsertar.setInt(1, cedula);
+        psInsertar.setString(2, nombre);
+        psInsertar.setString(3, apellido);
+        psInsertar.setInt(4, telefono);
+        psInsertar.setString(5, turno);
+        psInsertar.setInt(6, id_grupo);
+        psInsertar.setString(7, materias);
+        psInsertar.executeUpdate();
+
+    } finally {
+        if (rs != null) rs.close();
+        if (psVerificar != null) psVerificar.close();
+        if (psInsertar != null) psInsertar.close();
+        if (con != null) con.close();
     }
+}
 
     // Guardar licencia y devolver el ID generado
     public static int guardarLicencia(String fecha_inicio, String fecha_fin, String justificacion, int cedula) 
@@ -198,4 +222,20 @@ public class FachadaLogica {
         persist.eliminarRegistroCompleto(cedula); 
         // Llama a un método de PersistenciaApp para eliminar todos los registros relacionados a un profesor.
     }
+   
+// Validar si la cédula ya existe
+public static boolean existeCedula(int cedula) throws SQLException, BDException, CapaException.BDException {
+    String sql = "SELECT COUNT(*) FROM PROFESOR WHERE cedula = ?";
+    Connection con = Conexion.getConnection();
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cedula);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    }
+    return false;
+}
+
+
 }

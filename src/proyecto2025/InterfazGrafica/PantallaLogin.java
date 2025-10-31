@@ -25,7 +25,7 @@ public class PantallaLogin extends javax.swing.JDialog {
     }
 
     Login log = new Login();
-    // Instancia de la clase Login que almacena los datos de usuario y contraseña.
+    // Instancia de la clase Login que almacena los ||| datos de usuario y contraseña.
 
     public boolean loginExitoso = false;
     // Variable que indica si el login fue exitoso o no.
