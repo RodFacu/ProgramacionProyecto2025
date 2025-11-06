@@ -57,7 +57,7 @@ private void cargarDatosDesdeBD() {
                 rs.getString("nombre"),
                 rs.getString("apellido"),
                 rs.getInt("cedula"),
-                "Desconocida", // Valor temporal para materias, se puede actualizar luego
+                rs.getString("materias"),
                 rs.getString("nombre_grupo"),
                 rs.getString("fecha_inicio"),
                 rs.getString("fecha_cierre"),

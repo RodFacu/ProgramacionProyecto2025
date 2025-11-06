@@ -248,9 +248,6 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtnombre">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtnombreActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -300,25 +297,16 @@
     <Component class="javax.swing.JTextField" name="txtapellido">
     </Component>
     <Component class="javax.swing.JTextField" name="txtmaterias">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtmateriasActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNombre_grupo">
     </Component>
     <Component class="javax.swing.JTextField" name="txtcedula">
     </Component>
     <Component class="javax.swing.JTextField" name="txtturno">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtturnoActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtfechainicio">
     </Component>
     <Component class="javax.swing.JTextField" name="txttelefono">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txttelefonoActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
@@ -371,9 +359,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtfechafin">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtfechafinActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel22">
       <Properties>

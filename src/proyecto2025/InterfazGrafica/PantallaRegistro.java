@@ -223,12 +223,6 @@ private void permitirSoloNumeros(javax.swing.JTextField campo) {
             }
         });
 
-        txtnombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtnombreActionPerformed(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Ingrese su nombre:");
 
@@ -245,24 +239,6 @@ private void permitirSoloNumeros(javax.swing.JTextField campo) {
         jLabel9.setText("Estara ausente desde");
 
         jLabel10.setText("estara ausente hasta");
-
-        txtmaterias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtmateriasActionPerformed(evt);
-            }
-        });
-
-        txtturno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtturnoActionPerformed(evt);
-            }
-        });
-
-        txttelefono.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txttelefonoActionPerformed(evt);
-            }
-        });
 
         jLabel11.setText("Ej: Juan");
 
@@ -283,12 +259,6 @@ private void permitirSoloNumeros(javax.swing.JTextField campo) {
         jLabel20.setText("EJ: MD, MB");
 
         jLabel21.setText("Ingrese su num de telefono");
-
-        txtfechafin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtfechafinActionPerformed(evt);
-            }
-        });
 
         jLabel22.setText("ej: 091824782");
 
@@ -459,6 +429,7 @@ private void permitirSoloNumeros(javax.swing.JTextField campo) {
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
  controlError = -1;
+
 // Inicializa el control de errores con un valor de estado inicial.
 
 
@@ -526,35 +497,15 @@ controlError = 7;
 PantallaInformacionAdministracion admin = PantallaInformacionAdministracion.getInstancia();
 // Obtiene la instancia singleton de la ventana de administración para actualizar su tabla.
 
-admin.agregarFilaATabla(
-    nombre,
-    apellido,
-    Integer.valueOf(cedula),
-    materias,
-    id_grupo,
-    nombre_grupo,
-    fecha_inicio,
-    fecha_fin,
-    justificacion,
-    id_Licencia,
-    Integer.valueOf(telefono)
-);
+
 // Agrega una nueva fila con los datos del registro en la tabla de administración.
 
-admin.setVisible(true);
+admin.setVisible(false);
 // Asegura que la ventana de administración sea visible.
 
 PantallaInformacion info = new PantallaInformacion();
-info.agregarFilaATabla(
-    nombre, 
-    apellido, 
-    materias, 
-    nombre_grupo,
-    id_grupo, 
-    fecha_inicio, 
-    fecha_fin
-);
-info.setVisible(false);
+
+info.setVisible(true);
 // Actualiza también la ventana de información general (oculta) para mantener consistencia de datos.
 
 controlError = 8;
@@ -664,60 +615,10 @@ private void validarTelefono(javax.swing.JTextField campo) {
 
     }//GEN-LAST:event_btnvolveratrasActionPerformed
 
-    private void txttelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelefonoActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_txttelefonoActionPerformed
-
-    private void txtmateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtmateriasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtmateriasActionPerformed
-
-    private void txtnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtnombreActionPerformed
-
-    private void txtturnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtturnoActionPerformed
-        // TODO add your handling code here
-         
-
-    }//GEN-LAST:event_txtturnoActionPerformed
-
-    private void txtfechafinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfechafinActionPerformed
-        // TODO add your handling code here:
-
-        
-    }//GEN-LAST:event_txtfechafinActionPerformed
-
         
         
      
-public void txtfechainicioActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        
-    }   
-public void txtjustificacion(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        
-    }   
-
- public void txtNombre_grupo(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        
-    }   
- public void txtcedula(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        
-    }  
-public void txtapellido(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-        
-        
-    }   
+  
  
 
     /**
